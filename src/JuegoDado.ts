@@ -12,6 +12,8 @@ export class JuegoDado {
     dado2 : Dado = new Dado;
     vencedor : Jugador | null = null;
     private bandJugador: boolean = true;
+    // Nueva propiedad para almacenar el historial de jugadas
+    historial: string[] = [];
 
     constructor(nombreJugador1 : string, nombreJugador2: string) {
         this.jugador1 = new Jugador(nombreJugador1);
@@ -44,14 +46,15 @@ export class JuegoDado {
         this.marcadorJugador1 = 0;
         this.marcadorJugador2 = 0;
 
+        this.historial = []; // Limpiar historial
+
         this.elegirPrimerLanzador();
 
         do{
             this.iniciarJugada();
             this.cantidadJugadas++;
 
-            console.log(`Num. Jugada: ${this.cantidadJugadas} | Puntaje ${this.jugador1.nombre} = ${this.marcadorJugador1} 
-            | Puntaje ${this.jugador2.nombre} = ${this.marcadorJugador2}`);
+            this.historial.push(`Num. Jugada: ${this.cantidadJugadas} | Puntaje ${this.jugador1.nombre} = ${this.marcadorJugador1} | Puntaje ${this.jugador2.nombre} = ${this.marcadorJugador2}`);
 
         }while((this.marcadorJugador1 != 5) && (this.marcadorJugador2 != 5));
 

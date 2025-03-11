@@ -7,14 +7,14 @@ function historialJugadas(mensaje, tipo = 'normal') {
     if (contenedorHistorial) {
         const entrada = document.createElement('div');
         entrada.className = `log-entry ${tipo}`;
-        // Agregar icono según el tipo
+        // Agregar icono según el tipo de mensaje
         const icono = document.createElement('span');
         icono.className = 'log-icon';
         switch (tipo) {
             case 'advertencia':
                 icono.textContent = '⚠️';
                 break;
-            case 'éxito':
+            case 'exito':
                 icono.textContent = '✅';
                 break;
             default:
@@ -28,17 +28,6 @@ function historialJugadas(mensaje, tipo = 'normal') {
         contenedorHistorial.appendChild(entrada);
     }
 }
-// Pasar la informacion del console.log hacia la interfaz
-console.log = ((logOriginal) => {
-    return function (mensaje, ...parametrosOpcionales) {
-        let mensajeCompleto = String(mensaje);
-        if (parametrosOpcionales.length > 0) {
-            mensajeCompleto += ' ' + parametrosOpcionales.join(' ');
-        }
-        historialJugadas(mensajeCompleto);
-        logOriginal.call(console, mensaje, ...parametrosOpcionales);
-    };
-})(console.log);
 window.addEventListener('DOMContentLoaded', () => {
     const botonInicio = document.getElementById('iniciarJuego');
     const entradaJugador1 = document.getElementById('Jugador1');
@@ -58,11 +47,16 @@ window.addEventListener('DOMContentLoaded', () => {
         // Se crea la instancia del juego con los nombres ingresados
         const juego = new JuegoDado(nombreJugador1, nombreJugador2);
         juego.iniciarJuego();
+        // Historial de jugadas
+        juego.historial.forEach(mensajeTexto => {
+            historialJugadas(mensajeTexto, 'normal');
+        });
+        // Mensaje de vencedor
         if (juego.vencedor === null) {
             historialJugadas("Empate. No hay un vencedor", 'advertencia');
         }
         else {
-            historialJugadas(`¡El vencedor es ${juego.vencedor.nombre}!`, 'éxito');
+            historialJugadas(`¡El vencedor es ${juego.vencedor.nombre}!`, 'exito');
         }
     });
 });

@@ -3,20 +3,20 @@ import { JuegoDado } from "./JuegoDado.js";
 /**
  * Función para escribir un mensaje en el contenedor de salida del juego.
  */
-function historialJugadas(mensaje: string, tipo: 'normal' | 'advertencia' | 'éxito' = 'normal') {
+function historialJugadas(mensaje: string, tipo: 'normal' | 'advertencia' | 'exito' = 'normal') {
     const contenedorHistorial = document.getElementById('gameOutput');
     if (contenedorHistorial) {
         const entrada = document.createElement('div');
         entrada.className = `log-entry ${tipo}`;
 
-        // Agregar icono según el tipo
+        // Agregar icono según el tipo de mensaje
         const icono = document.createElement('span');
         icono.className = 'log-icon';
         switch(tipo) {
             case 'advertencia':
                 icono.textContent = '⚠️';
                 break;
-            case 'éxito':
+            case 'exito':
                 icono.textContent = '✅';
                 break;
             default:
@@ -32,18 +32,6 @@ function historialJugadas(mensaje: string, tipo: 'normal' | 'advertencia' | 'éx
         contenedorHistorial.appendChild(entrada);
     }
 }
-
-// Pasar la informacion del console.log hacia la interfaz
-console.log = ((logOriginal) => {
-    return function (mensaje?: any, ...parametrosOpcionales: any[]) {
-        let mensajeCompleto = String(mensaje);
-        if (parametrosOpcionales.length > 0) {
-            mensajeCompleto += ' ' + parametrosOpcionales.join(' ');
-        }
-        historialJugadas(mensajeCompleto);
-        logOriginal.call(console, mensaje, ...parametrosOpcionales);
-    };
-})(console.log);
 
 window.addEventListener('DOMContentLoaded', () => {
     const botonInicio = document.getElementById('iniciarJuego') as HTMLButtonElement;
@@ -69,10 +57,16 @@ window.addEventListener('DOMContentLoaded', () => {
         const juego = new JuegoDado(nombreJugador1, nombreJugador2);
         juego.iniciarJuego();
 
+        // Historial de jugadas
+        juego.historial.forEach(mensajeTexto => {
+            historialJugadas(mensajeTexto, 'normal');
+        });
+
+        // Mensaje de vencedor
         if (juego.vencedor === null) {
             historialJugadas("Empate. No hay un vencedor", 'advertencia');
         } else {
-            historialJugadas(`¡El vencedor es ${juego.vencedor.nombre}!`, 'éxito');
+            historialJugadas(`¡El vencedor es ${juego.vencedor.nombre}!`, 'exito');
         }
     });
 });
