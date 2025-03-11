@@ -14,4 +14,4 @@ Typescript - App que simula un juego de dados
 
 ## Visualizacion
 
-![Vista previa de la aplicación](https://github.com/Caja98/Programa_Dado/raw/master/Visualizacion.png)
+![Vista previa de la aplicación](https://github.com/Caja98/Programa_Dado/raw/main/Visualizacion.png)
